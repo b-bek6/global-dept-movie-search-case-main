@@ -1,14 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { searchMoviesAction } from "~/lib/action";
 
 export function SearchBar() {
   const [query, setQuery] = useState("");
 
   // TODO(candidate): wire this up to lib/api.ts's searchMovies() and render results
   // (with pagination) instead of just logging. See lib/api.ts and app/page.tsx.
+
+   async function runSearch(searchQuery: string, searchPage: number) {
+    try {
+      const data =  await searchMoviesAction(searchQuery, searchPage);
+      console.log(data);
+    } catch {
+    }
+  }
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    runSearch("hello",1)
     console.log("TODO: search for", query);
   }
 
