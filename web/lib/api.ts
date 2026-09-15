@@ -56,3 +56,13 @@ export function searchMovies(query: string, page = 1): Promise<MovieSearchResult
     cache: "no-store",
   });
 }
+
+export interface MovieDetails extends Movie {
+  runtimeMinutes: number | null;
+  genres: string[];
+  trailerKey: string | null;
+}
+
+export function getMovieDetails(id: number): Promise<MovieDetails> {
+  return apiFetch<MovieDetails>(`/movies/${id}`, { cache: "no-store" });
+}
