@@ -43,3 +43,16 @@ export function getTrendingMovies(): Promise<Movie[]> {
 
 // TODO(candidate): add a searchMovies(query, page) function here once the API exposes
 // GET /movies/search — same apiFetch pattern as getTrendingMovies above.
+export interface MovieSearchResult {
+  results: Movie[];
+  page: number;
+  totalPages: number;
+  totalResults: number;
+}
+
+export function searchMovies(query: string, page = 1): Promise<MovieSearchResult> {
+  const params = new URLSearchParams({ query, page: String(page) });
+  return apiFetch<MovieSearchResult>(`/movies/search?${params.toString()}`, {
+    cache: "no-store",
+  });
+}
