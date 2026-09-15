@@ -61,9 +61,12 @@ export function SearchBar() {
         </button>
       </form>
 
-      {status === "loading" && <MovieGridSkeleton count={6} />}
+      {status === "loading" &&
+        <div role="status">
+          <MovieGridSkeleton count={6} />
+        </div>}
       {status === "error" && (
-        <div className="flex flex-col items-start gap-2">
+        <div role="alert" className="flex flex-col items-start gap-2">
           <p className="text-sm text-foreground">We couldn&apos;t complete that search.</p>
           <p className="text-sm text-muted">It might be slow, down, or unreachable right now.</p>
           <button
@@ -76,7 +79,7 @@ export function SearchBar() {
         </div>
       )}
       {status === "success" && results.length === 0 && (
-        <p className="text-sm text-muted">No results for “{submittedQuery}”.</p>
+        <p role="status" className="text-sm text-muted">No results for “{submittedQuery}”.</p>
       )}
       {status === "success" && results.length > 0 && (
         <div className="flex flex-col gap-4">
