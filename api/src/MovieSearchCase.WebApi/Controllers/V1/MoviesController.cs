@@ -30,4 +30,16 @@ public class MoviesController : ApiControllerBase
     // following the same one-liner pattern as GetTrending — resolve a handler from the
     // factory and call HandleAsync(Request). See Handlers/Movies/GetTrendingMoviesHandler.cs
     // for what the handler itself should look like.
+    [HttpGet("search")]
+    [SwaggerOperation(Summary = "Search movies", OperationId = "SearchMovies")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Paged movie search results", typeof(Models.Movies.MovieSearchResult))]
+    public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] int page = 1) =>
+        await _requestHandlerFactory.SearchMovies(query, page).HandleAsync(Request);
+
+    [HttpGet("{id:int}")]
+    [SwaggerOperation(Summary = "Get movie details", OperationId = "GetMovieDetails")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Movie details", typeof(Models.Movies.MovieDetails))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "No movie found with the given id")]
+    public async Task<IActionResult> GetMovieDetails([FromRoute] int id) =>
+        await _requestHandlerFactory.GetMovieDetails(id).HandleAsync(Request);
 }

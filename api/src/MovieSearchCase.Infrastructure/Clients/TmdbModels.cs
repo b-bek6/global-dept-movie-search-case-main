@@ -45,3 +45,63 @@ public class TmdbMovie
     [JsonPropertyName("release_date")]
     public string? ReleaseDate { get; init; }
 }
+
+public class TmdbMovieDetails
+{
+    [JsonPropertyName("id")]
+    public int Id { get; init; }
+
+    [JsonPropertyName("title")]
+    public required string Title { get; init; }
+
+    [JsonPropertyName("overview")]
+    public string? Overview { get; init; }
+
+    [JsonPropertyName("poster_path")]
+    public string? PosterPath { get; init; }
+
+    [JsonPropertyName("backdrop_path")]
+    public string? BackdropPath { get; init; }
+
+    [JsonPropertyName("vote_average")]
+    public double VoteAverage { get; init; }
+
+    [JsonPropertyName("release_date")]
+    public string? ReleaseDate { get; init; }
+
+    [JsonPropertyName("runtime")]
+    public int? Runtime { get; init; }
+
+    [JsonPropertyName("genres")]
+    public IReadOnlyList<TmdbGenre> Genres { get; init; } = [];
+}
+
+public class TmdbGenre
+{
+    [JsonPropertyName("id")]
+    public int Id { get; init; }
+
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+}
+
+public class TmdbVideosResponse
+{
+    [JsonPropertyName("results")]
+    public required IReadOnlyList<TmdbVideo> Results { get; init; }
+}
+
+public class TmdbVideo
+{
+    [JsonPropertyName("key")]
+    public required string Key { get; init; }
+
+    [JsonPropertyName("site")]
+    public required string Site { get; init; }
+
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    [JsonPropertyName("official")]
+    public bool Official { get; init; }
+}
