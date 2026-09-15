@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Net;
 using System.Net.Http.Json;
 using MovieSearchCase.Domain.Entities;
 using MovieSearchCase.Domain.Exceptions;
@@ -71,13 +73,74 @@ public class TmdbClient : ITmdbClient
                 "TMDB returned an empty trending movies response.");
         }
 
-        // return response.Results.Select(TmdbMovieMapper.ToDomainModel).ToList();
         return new PagedResponse<Movie>
         {
             Results = response.Results.Select(TmdbMovieMapper.ToDomainModel).ToList(),
             Page = response.Page,
             TotalPages = response.TotalPages,
             TotalResults = response.TotalResults,
+        };
+    }
+
+    public async Task<MovieDetails> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
+    {
+        TmdbMovieDetails? details;
+
+        try
+        {
+            details = await _httpClient.GetFromJsonAsync<TmdbMovieDetails>($"movie/{id}", cancellationToken);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new MovieException(
+                MovieException.ExceptionTitle,
+                ErrorType.EntityNotFound,
+                $"No movie found with id {id}.");
+        }
+        catch (HttpRequestException)
+        {
+            throw new MovieException(
+                MovieException.ExceptionTitle,
+                ErrorType.UpstreamServiceUnavailable,
+                "TMDB did not return movie details.");
+        }
+
+        if (details is null)
+        {
+            throw new MovieException(
+                MovieException.ExceptionTitle,
+                ErrorType.UpstreamServiceUnavailable,
+                "TMDB returned an empty movie details response.");
+        }
+
+        string? trailerKey = null;
+
+        try
+        {
+            var videos = await _httpClient.GetFromJsonAsync<TmdbVideosResponse>($"movie/{id}/videos", cancellationToken);
+
+            trailerKey = videos?.Results
+                .Where(video => video.Site == "YouTube" && video.Type == "Trailer")
+                .OrderByDescending(video => video.Official)
+                .Select(video => video.Key)
+                .FirstOrDefault();
+        }
+        catch (HttpRequestException)
+        {
+        }
+
+        return new MovieDetails
+        {
+            Id = details.Id,
+            Title = details.Title,
+            Overview = details.Overview,
+            PosterPath = details.PosterPath,
+            BackdropPath = details.BackdropPath,
+            VoteAverage = details.VoteAverage,
+            ReleaseDate = details.ReleaseDate == null ? null : DateOnly.Parse(details.ReleaseDate),
+            RuntimeMinutes = details.Runtime,
+            Genres = details.Genres.Select(genre => genre.Name).ToList(),
+            TrailerKey = trailerKey,
         };
     }
 }
