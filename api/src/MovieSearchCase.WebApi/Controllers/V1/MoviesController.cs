@@ -35,4 +35,11 @@ public class MoviesController : ApiControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "Paged movie search results", typeof(Models.Movies.MovieSearchResult))]
     public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] int page = 1) =>
         await _requestHandlerFactory.SearchMovies(query, page).HandleAsync(Request);
+
+    [HttpGet("{id:int}")]
+    [SwaggerOperation(Summary = "Get movie details", OperationId = "GetMovieDetails")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Movie details", typeof(Models.Movies.MovieDetails))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "No movie found with the given id")]
+    public async Task<IActionResult> GetMovieDetails([FromRoute] int id) =>
+        await _requestHandlerFactory.GetMovieDetails(id).HandleAsync(Request);
 }
