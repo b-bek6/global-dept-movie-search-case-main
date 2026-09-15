@@ -4,7 +4,7 @@ import { useState } from "react";
 import { searchMoviesAction } from "~/lib/action";
 import { MovieCard } from "~/components/MovieCard";
 import type { Movie } from "~/types/movie";
-import { MovieGridSkeleton } from "../MovieGridSkeleton/MovieGridSkeleton";
+import { MovieGridSkeleton } from "~/components/MovieGridSkeleton";
 
 type Status = "loading" | "error" | "success";
 
@@ -63,7 +63,17 @@ export function SearchBar() {
 
       {status === "loading" && <MovieGridSkeleton count={6} />}
       {status === "error" && (
-        <p className="text-sm text-red-500">Something went wrong. Try again.</p>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-sm text-foreground">We couldn&apos;t complete that search.</p>
+          <p className="text-sm text-muted">It might be slow, down, or unreachable right now.</p>
+          <button
+            type="button"
+            onClick={() => runSearch(submittedQuery, page)}
+            className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-500"
+          >
+            Try again
+          </button>
+        </div>
       )}
       {status === "success" && results.length === 0 && (
         <p className="text-sm text-muted">No results for “{submittedQuery}”.</p>
