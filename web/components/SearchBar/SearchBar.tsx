@@ -4,8 +4,9 @@ import { useState } from "react";
 import { searchMoviesAction } from "~/lib/action";
 import { MovieCard } from "~/components/MovieCard";
 import type { Movie } from "~/types/movie";
+import { MovieGridSkeleton } from "../MovieGridSkeleton/MovieGridSkeleton";
 
-type Status =  "loading" | "error" | "success";
+type Status = "loading" | "error" | "success";
 
 export function SearchBar() {
   const [query, setQuery] = useState("");
@@ -60,7 +61,7 @@ export function SearchBar() {
         </button>
       </form>
 
-      {status === "loading" && <p className="text-sm text-muted">Searching…</p>}
+      {status === "loading" && <MovieGridSkeleton count={6} />}
       {status === "error" && (
         <p className="text-sm text-red-500">Something went wrong. Try again.</p>
       )}
