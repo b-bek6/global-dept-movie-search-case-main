@@ -83,6 +83,7 @@ export function SearchBar() {
       )}
       {status === "success" && results.length > 0 && (
         <div className="flex flex-col gap-4">
+          <h2 className="sr-only">Search results</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {results.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
@@ -93,6 +94,7 @@ export function SearchBar() {
               type="button"
               disabled={page <= 1}
               onClick={() => runSearch(submittedQuery, page - 1)}
+              aria-label={`Go to page ${page - 1}`}
               className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-40"
             >
               Previous
@@ -104,6 +106,7 @@ export function SearchBar() {
               type="button"
               disabled={page >= totalPages}
               onClick={() => runSearch(submittedQuery, page + 1)}
+              aria-label={`Go to page ${page + 1}`}
               className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-40"
             >
               Next
