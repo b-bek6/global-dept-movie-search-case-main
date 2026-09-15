@@ -13,4 +13,5 @@ public interface IMovieService
     // MovieService by calling ITmdbClient's new search method.
     Task<PagedResponse<Movie>> SearchAsync(string query, int page, CancellationToken cancellationToken);
 
+    Task<MovieDetails> GetMovieDetailsAsync(int id, CancellationToken cancellationToken);
 }
