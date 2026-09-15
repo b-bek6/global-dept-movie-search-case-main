@@ -1,4 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup>  
+  <UserSecretsId>86ea6773-0d24-40cb-bd87-1bf03f115eb4</UserSecretsId>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" />
