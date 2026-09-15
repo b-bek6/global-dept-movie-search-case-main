@@ -13,4 +13,5 @@ public class MoviesRequestHandlerFactory : IMoviesRequestHandlerFactory
     }
 
     public IRequestHandlerAsync GetTrendingMovies() => new GetTrendingMoviesHandler(_movieService);
+    public IRequestHandlerAsync SearchMovies(string query, int page) => new SearchMoviesHandler(_movieService, query, page);
 }
