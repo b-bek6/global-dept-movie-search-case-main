@@ -34,7 +34,7 @@ export function SearchBar() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!query.trim()) return;
-    runSearch(query, page);
+    runSearch(query, 1);
   }
 
   return (
